@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#EDEAE4">
+<meta name="supported-color-schemes" content="light">
+<title>Sidelined — Injury Check-In</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%231C2321'/%3E%3Cpath d='M14 46 A22 22 0 0 1 50 46' fill='none' stroke='%23EDEAE4' stroke-width='6' stroke-linecap='round'/%3E%3Cline x1='32' y1='46' x2='32' y2='24' stroke='%232E5C8A' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='46' r='4' fill='%23EDEAE4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bone:#EDEAE4;
+    --ink:#1C2321;
+    --ink-soft:#4A5250;
+    --line:#C9C2B2;
+    --blue:#2E5C8A;
+    --blue-soft:#DCE6EE;
+    --amber:#B8791E;
+    --amber-soft:#F3E3C7;
+    --red:#B23A32;
+    --red-soft:#F3DAD6;
+    --card:#FFFFFF;
+  }
+  *{box-sizing:border-box; forced-color-adjust:none;}
+  html{
+    color-scheme:light only;
+    background:#EDEAE4;
+    forced-color-adjust:none;
+  }
+  body{
+    margin:0;
+    background:#EDEAE4 !important;
+    color:#1C2321 !important;
+    font-family:'IBM Plex Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    forced-color-adjust:none;
+  }
+  .wrap{max-width:600px;margin:0 auto;padding:0 0 60px;}
+
+  /* HERO */
+  .hero{
+    padding:28px 20px 22px;
+    border-bottom:2px solid var(--ink);
+    position:relative;
+  }
+  .brandmark{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .brandmark svg{flex-shrink:0;}
+  .wordmark{
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:500;
+    font-size:15px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    display:flex;
+    justify-content:space-between;
+  }
+  h1{
+    font-family:'Oswald',sans-serif;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.01em;
+    font-size:34px;
+    margin:6px 0 4px;
+    line-height:1.02;
+  }
+  .sub{color:var(--ink-soft);font-size:14.5px;max-width:44ch;}
+
+  .disclaimer{
+    margin:16px 20px 0;
+    padding:12px 14px;
+    background:var(--ink);
+    color:var(--bone);
+    font-size:12.5px;
+    line-height:1.5;
+    border-radius:2px;
+  }
+  .disclaimer b{color:#fff;}
+
+  /* SECTIONS */
+  section{padding:22px 20px;border-bottom:1px solid var(--line);}
+  .tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--blue);
+    margin-bottom:10px;
+    display:block;
+  }
+  label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    margin:14px 0 6px;
+  }
+  label:first-of-type{margin-top:0;}
+  input[type=text], select, textarea{
+    width:100%;
+    padding:10px 11px;
+    border:1.5px solid var(--ink);
+    border-radius:2px;
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:14.5px;
+    background:var(--card) !important;
+    color:var(--ink) !important;
+    color-scheme:light;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  select{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231C2321' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 12px center;
+    padding-right:32px;
+  }
+  select option{background:#fff;color:var(--ink);}
+  textarea{resize:vertical;min-height:64px;}
+  input::placeholder, textarea::placeholder{color:var(--ink-soft);opacity:.7;}
+  input:focus, select:focus, textarea:focus{outline:3px solid var(--blue-soft);outline-offset:0;border-color:var(--blue);}
+
+  .pain-row{display:flex;align-items:center;gap:12px;}
+  input[type=range]{flex:1;accent-color:var(--blue);}
+  .pain-val{
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:600;
+    font-size:18px;
+    min-width:28px;
+    text-align:right;
+  }
+
+  .flags{display:flex;flex-direction:column;gap:8px;margin-top:6px;}
+  .flag{
+    display:flex;align-items:center;gap:9px;
+    padding:9px 10px;
+    border:1.5px solid var(--line);
+    border-radius:2px;
+    font-size:13.5px;
+    cursor:pointer;
+  }
+  .flag:has(input:checked){border-color:var(--red);background:var(--red-soft);}
+  .flag input{accent-color:var(--red);width:16px;height:16px;}
+
+  .photo-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px;}
+  .photo-btn{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    padding:9px 12px;
+    border:1.5px dashed var(--ink-soft);
+    background:transparent;
+    border-radius:2px;
+    cursor:pointer;
+    color:var(--ink-soft);
+  }
+  .thumb{width:52px;height:52px;object-fit:cover;border-radius:2px;border:1.5px solid var(--ink);}
+
+  .primary-btn{
+    width:100%;
+    padding:14px;
+    background:var(--ink);
+    color:var(--bone);
+    border:none;
+    border-radius:2px;
+    font-family:'Oswald',sans-serif;
+    font-size:16px;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:18px;
+  }
+  .primary-btn:disabled{opacity:.5;cursor:default;}
+  .primary-btn:not(:disabled):active{transform:translateY(1px);}
+
+  /* DIAL */
+  .dial-wrap{display:flex;flex-direction:column;align-items:center;padding:26px 20px 6px;}
+  .dial-label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);
+    margin-top:6px;
+  }
+
+  /* RESULT */
+  #result{display:none;}
+  .verdict-card{
+    margin:0 20px 18px;
+    border:2px solid var(--ink);
+    border-radius:2px;
+    overflow:hidden;
+  }
+  .verdict-head{
+    padding:14px 16px;
+    color:#fff;
+    font-family:'Oswald',sans-serif;
+    font-size:22px;
+    text-transform:uppercase;
+    letter-spacing:.02em;
+    font-weight:600;
+  }
+  .verdict-head span{
+    display:block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    text-transform:none;
+    letter-spacing:.04em;
+    font-weight:500;
+    opacity:.85;
+    margin-top:2px;
+  }
+  .verdict-body{padding:16px;background:var(--card);}
+  .verdict-body h3{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-soft);margin:14px 0 6px;
+  }
+  .verdict-body h3:first-child{margin-top:0;}
+  .verdict-body ul{margin:0;padding-left:18px;font-size:14px;line-height:1.55;}
+  .verdict-body p{font-size:14px;line-height:1.55;margin:0;}
+  .redflag-box{
+    background:var(--red-soft);
+    border:1.5px solid var(--red);
+    padding:10px 12px;
+    border-radius:2px;
+    font-size:13.5px;
+    margin-top:14px;
+  }
+
+  /* GP CARD */
+  .gp-card{
+    margin:0 20px 18px;
+    border:2px solid var(--ink);
+    border-radius:2px;
+    background:var(--card);
+    padding:16px;
+  }
+  .gp-head p{
+    font-size:14px;
+    line-height:1.5;
+    margin:6px 0 14px;
+  }
+  #postcode{
+    text-transform:uppercase;
+    letter-spacing:.03em;
+  }
+  .gp-links{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+  .gp-link-btn{
+    width:100%;
+    padding:12px;
+    background:var(--blue-soft);
+    color:var(--blue);
+    border:1.5px solid var(--blue);
+    border-radius:2px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    letter-spacing:.02em;
+    cursor:pointer;
+    text-align:left;
+  }
+  .gp-link-btn:active{transform:translateY(1px);}
+  .gp-link-btn:disabled{opacity:.45;cursor:default;}
+  .gp-link-btn.urgent-link{
+    background:var(--red-soft);
+    color:var(--red);
+    border-color:var(--red);
+    font-weight:600;
+  }
+  .gp-note{
+    font-size:11.5px;
+    color:var(--ink-soft);
+    margin:12px 0 0;
+    line-height:1.5;
+  }
+
+  .followup{padding:0 20px 20px;}
+  .followup textarea{margin-top:6px;}
+  .followup .primary-btn{background:var(--blue);}
+
+  .thread{margin:0 20px;}
+  .msg{
+    font-size:13.5px;
+    padding:9px 11px;
+    border-radius:2px;
+    margin-bottom:8px;
+    line-height:1.5;
+  }
+  .msg.user{background:var(--blue-soft);border:1px solid var(--blue);}
+  .msg.app{background:#fff;border:1px solid var(--line);}
+
+  .spinner{
+    display:none;align-items:center;gap:8px;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);
+    padding:14px 20px;
+  }
+  .spinner.on{display:flex;}
+  .dot{width:6px;height:6px;background:var(--blue);border-radius:50%;animation:pulse 1s infinite ease-in-out;}
+  .dot:nth-child(2){animation-delay:.15s;} .dot:nth-child(3){animation-delay:.3s;}
+  @keyframes pulse{0%,80%,100%{opacity:.25;} 40%{opacity:1;}}
+
+  footer{
+    padding:16px 20px 0;
+    font-size:11px;
+    color:var(--ink-soft);
+    font-family:'IBM Plex Mono',monospace;
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="brandmark">
+      <svg width="34" height="34" viewBox="0 0 64 64">
+        <rect width="64" height="64" rx="10" fill="#1C2321"/>
+        <path d="M14 46 A22 22 0 0 1 50 46" fill="none" stroke="#EDEAE4" stroke-width="6" stroke-linecap="round"/>
+        <line x1="32" y1="46" x2="32" y2="24" stroke="#2E5C8A" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="32" cy="46" r="4" fill="#EDEAE4"/>
+      </svg>
+      <a href="index.html" class="wordmark" style="color:inherit;text-decoration:none;">Sidelined</a>
+    </div>
+    <div class="eyebrow"><span>INJURY CHECK-IN</span><span id="clock"></span></div>
+    <h1>Should you<br>keep training?</h1>
+    <p class="sub">Describe what's going on. This gives you a plain-English read on it — not a diagnosis — and tells you when it's worth seeing someone.</p>
+  </div>
+
+  <div class="disclaimer">
+    <b>Not medical advice.</b> This is a general-information tool, not a clinician and not a diagnosis. It can be wrong. If something feels seriously wrong, don't wait on an app — call 111 (NHS) or 999 in an emergency.
+  </div>
+
+  <section>
+    <span class="tag">01 — The basics</span>
+    <label for="sport">Sport / activity</label>
+    <input type="text" id="sport" placeholder="e.g. gym — bench press">
+
+    <label for="part">Body part</label>
+    <select id="part">
+      <option>Shoulder</option><option>Bicep</option><option>Elbow</option>
+      <option>Wrist</option><option>Knee</option><option>Ankle</option>
+      <option>Lower back</option><option>Hip</option><option>Neck</option><option>Other</option>
+    </select>
+
+    <label for="mech">What happened, and when</label>
+    <textarea id="mech" placeholder="e.g. felt a pinch on the last rep of overhead press yesterday, no pop, pain came on gradually over the set"></textarea>
+
+    <label>Onset</label>
+    <select id="onset"><option>Sudden (specific moment)</option><option>Gradual (built up over days/weeks)</option></select>
+  </section>
+
+  <section>
+    <span class="tag">02 — Symptoms now</span>
+    <label for="symptoms">Describe the pain — where exactly, what makes it worse/better, any clicking, weakness, stiffness</label>
+    <textarea id="symptoms" placeholder="e.g. dull ache at the front of the shoulder, sharp twinge when lifting arm above head, fine at rest"></textarea>
+
+    <label>Pain right now</label>
+    <div class="pain-row">
+      <input type="range" id="pain" min="0" max="10" value="4">
+      <span class="pain-val" id="painVal">4</span>
+    </div>
+
+    <label>Add a photo (optional)</label>
+    <div class="photo-row">
+      <button type="button" class="photo-btn" id="photoBtn">+ attach photo</button>
+      <input type="file" id="photoInput" accept="image/*" style="display:none">
+      <img id="thumb" class="thumb" style="display:none">
+    </div>
+  </section>
+
+  <section>
+    <span class="tag">03 — Any of these right now?</span>
+    <div class="flags">
+      <label class="flag"><input type="checkbox" value="Numbness or tingling"> Numbness or tingling</label>
+      <label class="flag"><input type="checkbox" value="Visible deformity or joint looks out of place"> Visible deformity / joint looks out of place</label>
+      <label class="flag"><input type="checkbox" value="Cannot move the joint at all"> Can't move the joint at all</label>
+      <label class="flag"><input type="checkbox" value="Heard a loud pop followed by instability"> Loud pop followed by instability/giving way</label>
+      <label class="flag"><input type="checkbox" value="Significant swelling or bruising within minutes"> Rapid swelling/bruising (within minutes)</label>
+      <label class="flag"><input type="checkbox" value="Fever or feeling generally unwell"> Fever or feeling generally unwell</label>
+      <label class="flag"><input type="checkbox" value="Skin looks infected (red, hot, spreading)"> Skin red/hot/spreading (possible infection)</label>
+    </div>
+    <button class="primary-btn" id="submitBtn">Get my check-in</button>
+    <div id="errorBox" style="display:none;margin-top:14px;padding:12px 14px;background:var(--red-soft);border:1.5px solid var(--red);border-radius:2px;font-size:13px;line-height:1.5;">
+      <b>Error:</b> <span id="errorText"></span>
+    </div>
+  </section>
+
+  <div class="spinner" id="spinner"><div class="dot"></div><div class="dot"></div><div class="dot"></div><span>reading what you've told it</span></div>
+
+  <div id="result">
+    <div class="dial-wrap">
+      <svg id="dial" width="220" height="130" viewBox="0 0 220 130">
+        <path d="M 20 120 A 90 90 0 0 1 200 120" fill="none" stroke="#C9C2B2" stroke-width="14" stroke-linecap="round"/>
+        <path id="dialArc" d="M 20 120 A 90 90 0 0 1 200 120" fill="none" stroke="var(--blue)" stroke-width="14" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="283"/>
+        <line id="needle" x1="110" y1="120" x2="110" y2="45" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" style="transform-origin:110px 120px; transition: transform 1.1s cubic-bezier(.2,.8,.2,1);"/>
+        <circle cx="110" cy="120" r="6" fill="var(--ink)"/>
+      </svg>
+      <div class="dial-label" id="dialLabel">—</div>
+    </div>
+
+    <div class="verdict-card">
+      <div class="verdict-head" id="verdictHead">—<span id="verdictSub">—</span></div>
+      <div class="verdict-body">
+        <h3>What this looks like</h3>
+        <p id="assessmentText">—</p>
+        <h3>Possible causes</h3>
+        <ul id="causesList"></ul>
+        <h3>What you can do</h3>
+        <ul id="selfCareList"></ul>
+        <div class="redflag-box" id="redflagBox" style="display:none;">
+          <b>Flagged:</b> <span id="redflagText"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="gp-card" id="gpCard" style="display:none;">
+      <div class="gp-head">
+        <span class="tag" style="margin:0;">Next step</span>
+        <p id="gpMessage">This looks like something worth getting checked by a GP.</p>
+      </div>
+      <label for="postcode">Your postcode</label>
+      <div class="postcode-row">
+        <input type="text" id="postcode" placeholder="e.g. S80 1JG" autocapitalize="characters">
+      </div>
+      <div class="gp-links">
+        <button type="button" class="gp-link-btn" id="nhsLinkBtn">Find a GP — NHS site ↗</button>
+        <button type="button" class="gp-link-btn" id="mapsLinkBtn">GPs near me — Google Maps ↗</button>
+        <button type="button" class="gp-link-btn urgent-link" id="urgentLinkBtn" style="display:none;">NHS 111 online ↗</button>
+      </div>
+      <p class="gp-note">These open the NHS's own GP finder and Google Maps in a new tab — surgery pages there link out to each practice's own website where available.</p>
+    </div>
+
+    <div class="gp-card" id="rehabCard" style="display:none;">
+      <div class="gp-head">
+        <span class="tag" style="margin:0;">Rehab &amp; stretching</span>
+        <p>Some general exercise/stretching videos for this area — worth a look once you're moving pain-free enough to try them gently.</p>
+      </div>
+      <div class="gp-links">
+        <button type="button" class="gp-link-btn" id="rehabLinkBtn">Search YouTube ↗</button>
+      </div>
+      <p class="gp-note">This opens a YouTube search, not one specific video — have a look through and pick something that matches how you're actually feeling. Stop if anything sharpens the pain.</p>
+    </div>
+
+    <div class="thread" id="thread"></div>
+
+    <div class="followup">
+      <label for="followupInput">Ask a follow-up or add more detail</label>
+      <textarea id="followupInput" placeholder="e.g. it's been 3 days, still hurts to lift a kettle"></textarea>
+      <button class="primary-btn" id="followupBtn">Send</button>
+    </div>
+  </div>
+
+  <footer>SIDELINED — a demo, not a registered medical device. Built by Mackenzy.</footer>
+</div>
+
+<script>
+const clock = document.getElementById('clock');
+function tick(){ clock.textContent = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}); }
+tick(); setInterval(tick,30000);
+
+document.getElementById('pain').addEventListener('input', e=>{
+  document.getElementById('painVal').textContent = e.target.value;
+});
+
+let photoBase64 = null, photoMediaType = null;
+document.getElementById('photoBtn').addEventListener('click', ()=> document.getElementById('photoInput').click());
+document.getElementById('photoInput').addEventListener('change', e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  photoMediaType = file.type;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    photoBase64 = reader.result.split(',')[1];
+    const thumb = document.getElementById('thumb');
+    thumb.src = reader.result;
+    thumb.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+});
+
+const RECS = {
+  REST: {color:'var(--blue)', bg:'var(--blue-soft)', label:'Rest & monitor', needleDeg:-70, arc:70},
+  MODIFY: {color:'var(--amber)', bg:'var(--amber-soft)', label:'Train around it', needleDeg:0, arc:150},
+  GP: {color:'var(--red)', bg:'var(--red-soft)', label:'Get it checked — GP', needleDeg:55, arc:220},
+  URGENT: {color:'var(--red)', bg:'var(--red-soft)', label:'Seek care now', needleDeg:88, arc:283}
+};
+
+function setDial(rec){
+  const cfg = RECS[rec] || RECS.MODIFY;
+  document.getElementById('needle').style.transform = `rotate(${cfg.needleDeg}deg)`;
+  document.getElementById('dialArc').style.stroke = cfg.color;
+  document.getElementById('dialArc').style.strokeDashoffset = 283 - cfg.arc;
+  document.getElementById('dialLabel').textContent = cfg.label;
+  document.getElementById('verdictHead').style.background = cfg.color;
+}
+
+let conversationLog = [];
+
+function buildSystemPrompt(){
+  return `You are a cautious, non-clinical injury check-in assistant inside an app called Sidelined, aimed at gym-goers and amateur athletes.
+
+Rules:
+- You are NOT a doctor and never give a clinical diagnosis. You give plausible, general, non-professional information only.
+- If ANY of these are present, recommendation MUST be "URGENT": numbness/tingling, visible deformity, complete inability to move the joint, loud pop with instability, signs of infection, fever with the injury, or anything suggesting fracture/dislocation/tendon rupture.
+- Otherwise choose "GP" for anything persistent (7+ days), worsening, pain 7+/10, or where you're not confident it's benign.
+- Choose "MODIFY" for mild-to-moderate issues where training around the area with reduced load/range is reasonable.
+- Choose "REST" only for clearly mild, recent, low-pain presentations.
+- If a photo is provided, describe only visible, general observations (swelling, bruising, redness, symmetry) — never claim certainty from an image.
+- Keep everything short and in plain English, no jargon.
+
+Respond with ONLY valid JSON, no markdown fences, no preamble, matching exactly this shape:
+{
+  "assessment": "1-2 sentence plain-English read of what's likely going on",
+  "causes": ["cause 1", "cause 2", "cause 3"],
+  "selfCare": ["tip 1", "tip 2", "tip 3"],
+  "redFlags": ["flag 1"],
+  "recommendation": "REST" | "MODIFY" | "GP" | "URGENT",
+  "recommendationReason": "1 short sentence on why"
+}
+If there are no red flags, "redFlags" must be an empty array.`;
+}
+
+async function callClaude(userContent){
+  conversationLog.push({role:'user', content: userContent});
+  const response = await fetch("/.netlify/functions/chat", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({
+      system: buildSystemPrompt(),
+      messages: conversationLog
+    })
+  });
+  const data = await response.json();
+  if(data.error){
+    const msg = typeof data.error === 'string' ? data.error : (data.error.message || JSON.stringify(data.error));
+    throw new Error(msg);
+  }
+  const textBlock = (data.content||[]).find(b=>b.type==='text');
+  const raw = textBlock ? textBlock.text : '{}';
+  const clean = raw.replace(/```json|```/g,'').trim();
+  conversationLog.push({role:'assistant', content: raw});
+  return JSON.parse(clean);
+}
+
+function renderResult(json){
+  document.getElementById('result').style.display = 'block';
+  setDial(json.recommendation);
+  document.getElementById('verdictSub').textContent = json.recommendationReason || '';
+  document.getElementById('verdictHead').childNodes[0].textContent = (RECS[json.recommendation]||RECS.MODIFY).label;
+  document.getElementById('assessmentText').textContent = json.assessment || '—';
+
+  const causesList = document.getElementById('causesList');
+  causesList.innerHTML = '';
+  (json.causes||[]).forEach(c=>{ const li=document.createElement('li'); li.textContent=c; causesList.appendChild(li); });
+
+  const selfCareList = document.getElementById('selfCareList');
+  selfCareList.innerHTML = '';
+  (json.selfCare||[]).forEach(c=>{ const li=document.createElement('li'); li.textContent=c; selfCareList.appendChild(li); });
+
+  const redflagBox = document.getElementById('redflagBox');
+  if(json.redFlags && json.redFlags.length){
+    redflagBox.style.display = 'block';
+    document.getElementById('redflagText').textContent = json.redFlags.join('; ');
+  } else {
+    redflagBox.style.display = 'none';
+  }
+
+  const gpCard = document.getElementById('gpCard');
+  const urgentBtn = document.getElementById('urgentLinkBtn');
+  if(json.recommendation === 'GP' || json.recommendation === 'URGENT'){
+    gpCard.style.display = 'block';
+    document.getElementById('gpMessage').textContent = json.recommendation === 'URGENT'
+      ? "This has flagged as something to get looked at without waiting — don't just book a routine GP slot for this."
+      : "This looks like something worth getting checked by a GP rather than self-managing.";
+    urgentBtn.style.display = json.recommendation === 'URGENT' ? 'block' : 'none';
+  } else {
+    gpCard.style.display = 'none';
+  }
+
+  const rehabCard = document.getElementById('rehabCard');
+  if(json.recommendation === 'REST' || json.recommendation === 'MODIFY'){
+    rehabCard.style.display = 'block';
+  } else {
+    rehabCard.style.display = 'none';
+  }
+
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function currentPostcode(){
+  return document.getElementById('postcode').value.trim();
+}
+
+document.getElementById('rehabLinkBtn').addEventListener('click', ()=>{
+  const part = document.getElementById('part').value || 'injury';
+  const mech = document.getElementById('mech').value.trim();
+  // Use the person's own description (e.g. "rolled my ankle playing football")
+  // for a far more specific search than just the body part alone.
+  const mechShort = mech ? mech.split(/[.,;]/)[0].split(' ').slice(0, 8).join(' ') : '';
+  const query = mechShort
+    ? `${mechShort} rehab exercises physiotherapist`
+    : `${part} rehab stretching exercises physiotherapist`;
+  window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`, '_blank');
+});
+
+document.getElementById('nhsLinkBtn').addEventListener('click', ()=>{
+  window.open('https://www.nhs.uk/service-search/find-a-gp/', '_blank');
+});
+document.getElementById('mapsLinkBtn').addEventListener('click', ()=>{
+  const pc = currentPostcode();
+  if(!pc){ alert('Enter a postcode first.'); return; }
+  window.open(`https://www.google.com/maps/search/GP+surgery+near+${encodeURIComponent(pc)}`, '_blank');
+});
+document.getElementById('urgentLinkBtn').addEventListener('click', ()=>{
+  window.open('https://111.nhs.uk/', '_blank');
+});
+
+document.getElementById('submitBtn').addEventListener('click', async ()=>{
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  document.getElementById('spinner').classList.add('on');
+
+  const flags = Array.from(document.querySelectorAll('.flags input:checked')).map(i=>i.value);
+  const summary = [
+    `Sport/activity: ${document.getElementById('sport').value || 'not given'}`,
+    `Body part: ${document.getElementById('part').value}`,
+    `Onset: ${document.getElementById('onset').value}`,
+    `How it happened: ${document.getElementById('mech').value || 'not given'}`,
+    `Current symptoms: ${document.getElementById('symptoms').value || 'not given'}`,
+    `Pain right now (0-10): ${document.getElementById('pain').value}`,
+    `Checked warning signs: ${flags.length ? flags.join(', ') : 'none'}`
+  ].join('\n');
+
+  let userContent;
+  if(photoBase64){
+    userContent = [
+      {type:'text', text: summary},
+      {type:'image', source:{type:'base64', media_type: photoMediaType, data: photoBase64}}
+    ];
+  } else {
+    userContent = summary;
+  }
+
+  try{
+    const json = await callClaude(userContent);
+    renderResult(json);
+    document.getElementById('errorBox').style.display = 'none';
+  } catch(err){
+    console.error(err);
+    document.getElementById('errorText').textContent = err.message || String(err);
+    document.getElementById('errorBox').style.display = 'block';
+  } finally {
+    document.getElementById('spinner').classList.remove('on');
+    btn.disabled = false;
+  }
+});
+
+document.getElementById('followupBtn').addEventListener('click', async ()=>{
+  const input = document.getElementById('followupInput');
+  const text = input.value.trim();
+  if(!text) return;
+  const thread = document.getElementById('thread');
+  const userMsg = document.createElement('div');
+  userMsg.className = 'msg user';
+  userMsg.textContent = text;
+  thread.appendChild(userMsg);
+  input.value = '';
+  document.getElementById('spinner').classList.add('on');
+
+  try{
+    const json = await callClaude(text);
+    renderResult(json);
+    const appMsg = document.createElement('div');
+    appMsg.className = 'msg app';
+    appMsg.textContent = json.assessment;
+    thread.appendChild(appMsg);
+  } catch(err){
+    console.error(err);
+  } finally {
+    document.getElementById('spinner').classList.remove('on');
+  }
+});
+</script>
+</body>
+</html>

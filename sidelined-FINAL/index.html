@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#EDEAE4">
+<title>Sidelined — Should you keep training?</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%231C2321'/%3E%3Cpath d='M14 46 A22 22 0 0 1 50 46' fill='none' stroke='%23EDEAE4' stroke-width='6' stroke-linecap='round'/%3E%3Cline x1='32' y1='46' x2='32' y2='24' stroke='%232E5C8A' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='46' r='4' fill='%23EDEAE4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bone:#EDEAE4;
+    --ink:#1C2321;
+    --ink-soft:#4A5250;
+    --line:#C9C2B2;
+    --blue:#2E5C8A;
+    --blue-soft:#DCE6EE;
+    --amber:#B8791E;
+    --amber-soft:#F3E3C7;
+    --red:#B23A32;
+    --red-soft:#F3DAD6;
+    --card:#FFFFFF;
+  }
+  *{box-sizing:border-box; forced-color-adjust:none;}
+  html{color-scheme:light only; background:#EDEAE4;}
+  body{
+    margin:0;
+    background:#EDEAE4 !important;
+    color:#1C2321 !important;
+    font-family:'IBM Plex Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:600px;margin:0 auto;}
+
+  /* NAV */
+  nav{
+    display:flex;align-items:center;gap:10px;
+    padding:20px 20px 0;
+  }
+  .wordmark{
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:500;
+    font-size:14px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+  }
+
+  /* HERO */
+  .hero{
+    padding:36px 20px 30px;
+    border-bottom:2px solid var(--ink);
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--blue);
+    margin-bottom:10px;
+  }
+  h1{
+    font-family:'Oswald',sans-serif;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.01em;
+    font-size:42px;
+    margin:0 0 14px;
+    line-height:1.02;
+  }
+  .sub{
+    color:var(--ink-soft);
+    font-size:16px;
+    line-height:1.55;
+    max-width:42ch;
+    margin:0 0 26px;
+  }
+  .cta-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:15px 22px;
+    background:var(--ink);
+    color:var(--bone);
+    border:none;
+    border-radius:2px;
+    font-family:'Oswald',sans-serif;
+    font-size:16px;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+    font-weight:600;
+    text-decoration:none;
+    cursor:pointer;
+  }
+  .cta-btn:active{transform:translateY(1px);}
+
+  /* HOW IT WORKS */
+  section{padding:26px 20px;border-bottom:1px solid var(--line);}
+  .tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--blue);
+    display:block;
+    margin-bottom:16px;
+  }
+  .steps{display:flex;flex-direction:column;gap:16px;}
+  .step{display:flex;gap:14px;align-items:flex-start;}
+  .step-num{
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:600;
+    font-size:13px;
+    color:var(--blue);
+    border:1.5px solid var(--blue);
+    width:26px;height:26px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:50%;
+    flex-shrink:0;
+  }
+  .step h3{font-size:15px;margin:2px 0 4px;font-weight:600;}
+  .step p{font-size:13.5px;color:var(--ink-soft);margin:0;line-height:1.5;}
+
+  /* VERDICTS PREVIEW */
+  .verdict-chips{display:flex;flex-direction:column;gap:8px;margin-top:16px;}
+  .chip{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 12px;
+    border:1.5px solid var(--line);
+    border-radius:2px;
+    font-size:13px;
+  }
+  .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .dot.rest{background:var(--blue);}
+  .dot.modify{background:var(--amber);}
+  .dot.gp{background:var(--red);}
+  .dot.urgent{background:var(--red);border:2px solid var(--ink);}
+
+  /* DISCLAIMER */
+  .disclaimer-section{background:var(--ink);color:var(--bone);}
+  .disclaimer-section .tag{color:#8FB3D6;}
+  .disclaimer-section p{font-size:14px;line-height:1.6;margin:0 0 12px;}
+  .disclaimer-section p:last-child{margin-bottom:0;}
+  .disclaimer-section b{color:#fff;}
+  .disclaimer-section a{color:#8FB3D6;}
+
+  footer{
+    padding:20px;
+    text-align:center;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav>
+    <svg width="28" height="28" viewBox="0 0 64 64">
+      <rect width="64" height="64" rx="10" fill="#1C2321"/>
+      <path d="M14 46 A22 22 0 0 1 50 46" fill="none" stroke="#EDEAE4" stroke-width="6" stroke-linecap="round"/>
+      <line x1="32" y1="46" x2="32" y2="24" stroke="#2E5C8A" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="32" cy="46" r="4" fill="#EDEAE4"/>
+    </svg>
+    <span class="wordmark">Sidelined</span>
+  </nav>
+
+  <div class="hero">
+    <span class="eyebrow">Injury check-in</span>
+    <h1>Should you<br>keep training?</h1>
+    <p class="sub">Describe the pain, how it happened, and what sport you were doing. Get a plain-English read on it in under a minute — and a clear steer on whether to rest, train around it, or get it looked at.</p>
+    <a class="cta-btn" href="app.html">Start check-in →</a>
+  </div>
+
+  <section>
+    <span class="tag">How it works</span>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">1</span>
+        <div><h3>Tell it what happened</h3><p>Sport, body part, when it started, and how the pain behaves.</p></div>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <div><h3>Add a photo if it helps</h3><p>Swelling, bruising, or anything visible — optional but useful.</p></div>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <div><h3>Get a clear next step</h3><p>Rest, train around it, see a GP, or seek care now — with reasoning, not just a label.</p></div>
+      </div>
+    </div>
+    <div class="verdict-chips">
+      <div class="chip"><span class="dot rest"></span>Rest &amp; monitor</div>
+      <div class="chip"><span class="dot modify"></span>Train around it</div>
+      <div class="chip"><span class="dot gp"></span>Get it checked — GP</div>
+      <div class="chip"><span class="dot urgent"></span>Seek care now</div>
+    </div>
+  </section>
+
+  <section class="disclaimer-section">
+    <span class="tag">Before you start</span>
+    <p><b>This is not medical advice, and it is not a diagnosis.</b> Sidelined is a general-information tool. It can be wrong. It is not a substitute for a qualified clinician.</p>
+    <p>If something feels seriously wrong — numbness, a joint that looks out of place, a loud pop followed by instability, or you're generally unwell — don't wait on an app. Call <b>111</b> (NHS non-emergency) or <b>999</b> in an emergency.</p>
+  </section>
+
+  <section style="text-align:center;border-bottom:none;">
+    <a class="cta-btn" href="app.html">Start check-in →</a>
+  </section>
+
+  <footer>SIDELINED — a demo, not a registered medical device.</footer>
+</div>
+</body>
+</html>
